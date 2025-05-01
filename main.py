@@ -1,10 +1,21 @@
 import pygame as pg
 import math
+import os
+import sys
 
 def draw_rect_alpha(surface, color, rect):
     shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
     pg.draw.rect(shape_surf, color, shape_surf.get_rect())
     surface.blit(shape_surf, rect)
+
+def resource_path(relative_path):
+
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 # Pygame initial setup
 pg.init()
@@ -34,6 +45,7 @@ menu_state = 1 # 0 returns to player, 1 is main menu, 2 stage select, 3 is pause
 menu_select = 0 # 0,1,2 keeps track of where you are in the menu
 stage_select = 0 # Keeps track of which art to load, 0 first level, never gets run until menus are done
 font = pg.font.SysFont('Ink Free', 90, bold=True)
+#test_font = pg.font.SysFont('Ariel', 30)
 death_anim_count = 0 # Counter, makes death time take 1 second total
 menu_input_lag = 0 # To keep the menu from feeling impossible to navigate
 
@@ -44,17 +56,17 @@ menu_input_lag = 0 # To keep the menu from feeling impossible to navigate
 # Win Location: Turquoise -> (0, 162, 232, 255)
 player_loc_color = (153, 217, 234, 255)
 # Image loadings
-home_screen = pg.image.load('OnThinIceTitleScreen.png')
-select_screen = pg.image.load('OnThinIceSelectScreen.png')
-pause_screen = pg.image.load('OnThinIcePauseMenuCrop.png ')
-level_clear = pg.image.load('OnThinIceLevelClear.png')
-level_0 = pg.image.load('OnThinIceLevel0.png')
-level_1 = pg.image.load('OnThinIceLevel1.png')
-level_2 = pg.image.load('OnThinIceLevel2.png')
-level_3 = pg.image.load('OnThinIceLevel3.png')
-level_end = pg.image.load('OnThinIceLevelEnd.png')
-player_still = pg.image.load('OnThinIcePlayerStill.png')
-player_move = pg.image.load('OnThinIcePlayerMove.png')
+home_screen = pg.image.load(resource_path('Images/OnThinIceTitleScreen.png'))
+select_screen = pg.image.load(resource_path('Images/OnThinIceSelectScreen.png'))
+pause_screen = pg.image.load(resource_path('Images/OnThinIcePauseMenuCrop.png'))
+level_clear = pg.image.load(resource_path('Images/OnThinIceLevelClear.png'))
+level_0 = pg.image.load(resource_path('Images/OnThinIceLevel0.png'))
+level_1 = pg.image.load(resource_path('Images/OnThinIceLevel1.png'))
+level_2 = pg.image.load(resource_path('Images/OnThinIceLevel2.png'))
+level_3 = pg.image.load(resource_path('Images/OnThinIceLevel3.png'))
+level_end = pg.image.load(resource_path('Images/OnThinIceLevelEnd.png'))
+player_still = pg.image.load(resource_path('Images/OnThinIcePlayerStill.png'))
+player_move = pg.image.load(resource_path('Images/OnThinIcePlayerMove.png'))
 
 current_stage_image = level_0.convert() # Bit redundant, code does not like not having this
 
@@ -332,7 +344,7 @@ while running:
             # Movement logic
             player_loc.x += player_x_velocity
             player_loc.y += player_y_velocity
-
+        # ------------------------------------------------------------------------------------
             # Test collision, check if player location pixel is "alive"
             player_loc_color = current_stage_image.get_at((round(player_loc.x), round(player_loc.y)))
             if player_loc_color == (0, 162, 232, 255):
@@ -342,11 +354,11 @@ while running:
                 player_state = 2 # Player dies
 
             # Debug Writing, used for test cases only
-            #slides_text = font.render(f"Number of Slides: {total_slides}", True, (255, 255, 255))  # White color
+            #slides_text = test_font.render(f"Number of Slides: {total_slides}", True, (255, 255, 255))  # White color
             #screen.blit(slides_text, (10, 10))  # Draw at top-left corner
-            #collision_text = font.render(f"Player alive: {player_state}", True, (255, 255, 255))  # White color
+            #collision_text = test_font.render(f"Player alive: {player_state}", True, (255, 255, 255))  # White color
             #screen.blit(collision_text, (240, 10))  # Draw at top-left corner
-            #color_text = font.render(f"Color Location: {player_loc_color}", True, (255, 255, 255))
+            #color_text = test_font.render(f"Color Location: {player_loc_color}", True, (255, 255, 255))
             #screen.blit(color_text, (580, 10))
         # ------------------------------------------------------------------------------------
         case 2: # Player died, show death screen
